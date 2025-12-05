@@ -1,0 +1,22 @@
+# Dart/Pub
+.dart_tool/
+.packages
+build/
+# Flutter
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-plugins
+.flutter-plugins-dependencies
+# IDE
+.idea/
+.vscode/
+# Others
+*.iml
+*.ipr
+*.iws
+*.lock
+*.log
+*.tmp
+*.swp
+*.swo
+*.DS_Store
