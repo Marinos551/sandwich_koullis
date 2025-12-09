@@ -29,10 +29,7 @@ class MainScaffold extends StatelessWidget {
             title: const Text('Home'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const OrderScreen(maxQuantity: 5)),
-                (route) => false,
-              );
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
             },
           ),
           ListTile(
@@ -41,11 +38,9 @@ class MainScaffold extends StatelessWidget {
             onTap: () {
               Navigator.pop(context);
               final cart = cartProvider != null ? cartProvider!() : null;
-              if (cart != null) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => CartScreen(cart: cart)),
-                );
-              }
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => CartScreen(cart: cart ?? Cart())),
+              );
             },
           ),
           ListTile(
@@ -53,9 +48,7 @@ class MainScaffold extends StatelessWidget {
             title: const Text('About'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AboutScreen()),
-              );
+              Navigator.of(context).pushNamed('/about');
             },
           ),
           ListTile(
@@ -63,9 +56,7 @@ class MainScaffold extends StatelessWidget {
             title: const Text('Profile'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
+              Navigator.of(context).pushNamed('/profile');
             },
           ),
         ],
