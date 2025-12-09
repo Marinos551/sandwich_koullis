@@ -41,9 +41,9 @@ class _EditItemModalState extends State<EditItemModal> {
         children: [
           Row(
             children: [
-              const Text('Six-inch', style: normalText),
+              Text('Six-inch', style: normalText),
               Switch(value: _isFootlong, onChanged: (v) => setState(() => _isFootlong = v)),
-              const Text('Footlong', style: normalText),
+              Text('Footlong', style: normalText),
             ],
           ),
           const SizedBox(height: 12),
