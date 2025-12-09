@@ -38,7 +38,16 @@ class CartItemRow extends StatelessWidget {
             SizedBox(
               width: 64,
               height: 64,
-              child: Image.asset(sandwich.image, fit: BoxFit.cover),
+              child: Image.asset(
+                sandwich.image,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported),
+                  );
+                },
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
