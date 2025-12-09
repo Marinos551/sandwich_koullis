@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/views/app_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:sandwich_koullis/models/cart.dart';
 import 'package:sandwich_koullis/models/sandwich.dart';
 import 'package:sandwich_koullis/repositories/pricing_repository.dart';
 import 'package:sandwich_koullis/views/main_scaffold.dart';
+import 'package:sandwich_koullis/repositories/order_history_repository.dart';
+import 'package:sandwich_koullis/models/saved_order.dart';
+import 'package:sandwich_koullis/views/order_history_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final Cart cart;
-
-  const CheckoutScreen({super.key, required this.cart});
+  const CheckoutScreen({Key? key}) : super(key: key);
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -16,30 +18,47 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   bool _isProcessing = false;
+  final OrderHistoryRepository _orderHistoryRepo = OrderHistoryRepository(); // uses singleton
 
   Future<void> _processPayment() async {
     setState(() {
       _isProcessing = true;
     });
 
-    // A fake delay to simulate payment processing
-    await Future.delayed(const Duration(seconds: 2));
-
     final DateTime currentTime = DateTime.now();
     final int timestamp = currentTime.millisecondsSinceEpoch;
     final String orderId = 'ORD$timestamp';
 
+    final cart = Provider.of<Cart>(context, listen: false);
+    final sandwiches = cart.items.keys.toList();
+    final quantities = cart.items.values.toList();
     final Map orderConfirmation = {
       'orderId': orderId,
-      'totalAmount': widget.cart.totalPrice,
-      'itemCount': widget.cart.totalQuantity,
+      'totalAmount': cart.totalPrice,
+      'itemCount': cart.countOfItems,
       'estimatedTime': '15-20 minutes',
     };
 
-    // Check if this State object is being shown in the widget tree
+    // Save order to history immediately with details
+    final SavedOrder savedOrder = SavedOrder(
+      id: timestamp,
+      orderId: orderId,
+      totalAmount: cart.totalPrice,
+      itemCount: cart.countOfItems,
+      orderDate: currentTime,
+      sandwiches: sandwiches,
+      quantities: quantities,
+    );
+    _orderHistoryRepo.addOrder(savedOrder);
+    cart.clear();
+
     if (mounted) {
-      // Pop the checkout screen and return to the order screen with the confirmation
-      Navigator.pop(context, orderConfirmation);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => const OrderHistoryScreen(),
+        ),
+      );
     }
   }
 
@@ -53,12 +72,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   Widget build(BuildContext context) {
     List<Widget> columnChildren = [];
 
-    columnChildren.add(const Text('Order Summary', style: heading2));
+    columnChildren.add(Text('Order Summary', style: heading2));
     columnChildren.add(const SizedBox(height: 20));
 
-    for (final item in widget.cart.items) {
-      final Sandwich sandwich = item.sandwich;
-      final int quantity = item.quantity;
+    final cart = Provider.of<Cart>(context);
+    for (final entry in cart.items.entries) {
+      final Sandwich sandwich = entry.key;
+      final int quantity = entry.value;
       final double itemPrice = _calculateItemPrice(sandwich, quantity);
 
       final Widget itemRow = Row(
@@ -85,9 +105,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final Widget totalRow = Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Total:', style: heading2),
+        Text('Total:', style: heading2),
         Text(
-          '£${widget.cart.totalPrice.toStringAsFixed(2)}',
+          '£${cart.totalPrice.toStringAsFixed(2)}',
           style: heading2,
         ),
       ],
@@ -96,7 +116,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     columnChildren.add(const SizedBox(height: 40));
 
     columnChildren.add(
-      const Text(
+      Text(
         'Payment Method: Card ending in 1234',
         style: normalText,
         textAlign: TextAlign.center,
@@ -112,7 +132,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
       columnChildren.add(const SizedBox(height: 20));
       columnChildren.add(
-        const Text(
+        Text(
           'Processing payment...',
           style: normalText,
           textAlign: TextAlign.center,
@@ -122,7 +142,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       columnChildren.add(
         ElevatedButton(
           onPressed: _processPayment,
-          child: const Text('Confirm Payment', style: normalText),
+          child: Text('Confirm Payment', style: normalText),
         ),
       );
     }
