@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'package:sandwich_koullis/views/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/models/cart.dart';
@@ -40,8 +41,10 @@ class _CartScreenState extends State<CartScreen> {
       _cart.decrementQuantity(index);
       if (beforeQty == 1) {
         ScaffoldMessenger.of(context).showSnackBar(
+          // ignore: prefer_const_constructors
           SnackBar(
             key: const Key('cart_undo_snack'),
+            // ignore: prefer_const_constructors
             content: Text('Item removed from cart'),
           ),
         );

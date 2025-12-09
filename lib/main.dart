@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_koullis/models/cart.dart';
@@ -26,6 +28,7 @@ class App extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Welcome to Sandwich Koullis!'),
           ),
+          // ignore: prefer_const_constructors
           body: OrderScreen(maxQuantity: 5),
         ),
         routes: {

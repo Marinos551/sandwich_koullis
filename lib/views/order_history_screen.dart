@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/repositories/order_history_repository.dart';
+// ignore: unused_import
 import 'package:sandwich_koullis/models/saved_order.dart';
 
 class OrderHistoryScreen extends StatelessWidget {
@@ -14,6 +15,7 @@ class OrderHistoryScreen extends StatelessWidget {
         title: const Text('Order History'),
       ),
       body: orders.isEmpty
+          // ignore: prefer_const_constructors
           ? Center(child: Text('No order history yet.'))
           : ListView.builder(
               itemCount: orders.length,
@@ -29,6 +31,7 @@ class OrderHistoryScreen extends StatelessWidget {
                       final sandwich = order.sandwiches[i];
                       final qty = order.quantities[i];
                       return ListTile(
+                        // ignore: unnecessary_string_interpolations
                         title: Text('${sandwich.name}'),
                         subtitle: Text(
                             '${qty}x ${sandwich.isFootlong ? 'Footlong' : 'Six-inch'} on ${sandwich.breadType.name}'),

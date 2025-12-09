@@ -1,2 +1,6 @@
 # See https://dart.dev/guides/language/analysis-options for details
 include: package:flutter_lints/flutter.yaml
+analyzer:
+  errors:
+    duplicate_ignore: ignore
+    depend_on_referenced_packages: ignore

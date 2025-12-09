@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/views/app_styles.dart';
 import 'package:sandwich_koullis/models/cart.dart';
 import 'package:sandwich_koullis/views/cart_screen.dart';
+// ignore: unused_import
 import 'package:sandwich_koullis/main.dart';
+// ignore: unused_import
 import 'package:sandwich_koullis/views/about_screen.dart';
+// ignore: unused_import
 import 'package:sandwich_koullis/views/profile_screen.dart';
 
 typedef CartProvider = Cart? Function();

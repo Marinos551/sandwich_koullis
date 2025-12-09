@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/views/app_styles.dart';
 import 'package:sandwich_koullis/views/main_scaffold.dart';
@@ -15,6 +17,7 @@ class AboutScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Welcome to Sandwich Shop!', style: heading2),
+            // ignore: prefer_const_constructors
             SizedBox(height: 20),
             Text(
               'We are a family-owned business dedicated to serving the best sandwiches in town. ',

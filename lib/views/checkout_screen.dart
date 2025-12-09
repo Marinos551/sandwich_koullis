@@ -32,6 +32,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final cart = Provider.of<Cart>(context, listen: false);
     final sandwiches = cart.items.keys.toList();
     final quantities = cart.items.values.toList();
+    // ignore: unused_local_variable
     final Map orderConfirmation = {
       'orderId': orderId,
       'totalAmount': cart.totalPrice,

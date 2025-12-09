@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sandwich_koullis/models/cart.dart';
@@ -27,6 +29,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.shopping_cart),
+                // ignore: prefer_const_constructors
                 SizedBox(width: 4),
                 Text('${cart.countOfItems}'),
               ],
@@ -53,7 +56,9 @@ class CartIndicator extends StatelessWidget {
         return Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // ignore: prefer_const_constructors
             Icon(Icons.shopping_cart),
+            // ignore: prefer_const_constructors
             SizedBox(width: 4),
             Text('${cart.countOfItems}'),
           ],

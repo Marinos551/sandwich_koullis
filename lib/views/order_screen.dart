@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:sandwich_koullis/views/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -303,6 +305,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   );
                 },
               ),
+              // ignore: prefer_const_constructors
               SizedBox(height: 20),
             ],
           ),
