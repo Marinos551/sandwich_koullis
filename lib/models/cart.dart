@@ -1,4 +1,5 @@
-import 'package:sandwich_koullis/models/sandwich.dart';
+import 'package:flutter/foundation.dart';
+import 'sandwich.dart';
 import 'package:sandwich_koullis/repositories/pricing_repository.dart';
 
 /// Represents a sandwich in the cart with its quantity.
@@ -22,87 +23,84 @@ class CartItem {
 
 /// Shopping cart for a food delivery app.
 /// Manages a collection of sandwiches with their quantities.
-class Cart {
-  final PricingRepository _pricing;
-  final List<CartItem> _items = [];
+class Cart extends ChangeNotifier {
+    void incrementQuantity(int index) {
+      final sandwich = _items.keys.elementAt(index);
+      _items[sandwich] = _items[sandwich]! + 1;
+      notifyListeners();
+    }
 
-  Cart({PricingRepository? pricing})
-      : _pricing = pricing ?? PricingRepository();
+    void decrementQuantity(int index) {
+      final sandwich = _items.keys.elementAt(index);
+      final currentQty = _items[sandwich]!;
+      if (currentQty > 1) {
+        _items[sandwich] = currentQty - 1;
+      } else {
+        _items.remove(sandwich);
+      }
+      notifyListeners();
+    }
+  final Map<Sandwich, int> _items = {};
 
-  /// Get all items in the cart (read-only).
-  List<CartItem> get items => List.unmodifiable(_items);
+  Map<Sandwich, int> get items => Map.unmodifiable(_items);
 
-  /// Total number of items in cart.
-  int get itemCount => _items.length;
+  void add(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      _items[sandwich] = _items[sandwich]! + quantity;
+    } else {
+      _items[sandwich] = quantity;
+    }
+    notifyListeners();
+  }
 
-  /// Total quantity of all sandwiches.
-  int get totalQuantity =>
-      _items.fold(0, (sum, item) => sum + item.quantity);
+  void remove(Sandwich sandwich, {int quantity = 1}) {
+    if (_items.containsKey(sandwich)) {
+      final currentQty = _items[sandwich]!;
+      if (currentQty > quantity) {
+        _items[sandwich] = currentQty - quantity;
+      } else {
+        _items.remove(sandwich);
+      }
+      notifyListeners();
+    }
+  }
 
-  /// Total price of all items in the cart.
-  double get totalPrice =>
-      _items.fold(0.0, (sum, item) => sum + item.totalPrice(_pricing));
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
 
-  /// Check if cart is empty.
+  double get totalPrice {
+    final pricingRepository = PricingRepository();
+    double total = 0.0;
+
+    for (Sandwich sandwich in _items.keys) {
+      int quantity = _items[sandwich]!;
+      total += pricingRepository.calculatePrice(
+        quantity: quantity,
+        isFootlong: sandwich.isFootlong,
+      );
+    }
+
+    return total;
+  }
+
   bool get isEmpty => _items.isEmpty;
 
-  /// Add a sandwich to the cart.
-  /// If the same sandwich already exists, increase its quantity.
-  void addSandwich(Sandwich sandwich, {int quantity = 1}) {
-    if (quantity <= 0) return;
+  int get length => _items.length;
 
-    // Check if this sandwich is already in the cart
-    final existingIndex = _items.indexWhere(
-      (item) =>
-          item.sandwich.type == sandwich.type &&
-          item.sandwich.isFootlong == sandwich.isFootlong &&
-          item.sandwich.breadType == sandwich.breadType,
-    );
-
-    if (existingIndex != -1) {
-      _items[existingIndex].quantity += quantity;
-    } else {
-      _items.add(CartItem(sandwich: sandwich, quantity: quantity));
+  int get countOfItems {
+    int total = 0;
+    for (int quantity in _items.values) {
+      total += quantity;
     }
+    return total;
   }
 
-  /// Remove an item from the cart by index.
-  void removeAt(int index) {
-    if (index >= 0 && index < _items.length) {
-      _items.removeAt(index);
+  int getQuantity(Sandwich sandwich) {
+    if (_items.containsKey(sandwich)) {
+      return _items[sandwich]!;
     }
+    return 0;
   }
-
-  /// Increase quantity of item at index.
-  void incrementQuantity(int index) {
-    if (index >= 0 && index < _items.length) {
-      _items[index].quantity++;
-    }
-  }
-
-  /// Decrease quantity of item at index.
-  /// Removes the item if quantity reaches 0.
-  void decrementQuantity(int index) {
-    if (index >= 0 && index < _items.length) {
-      _items[index].quantity--;
-      if (_items[index].quantity <= 0) {
-        _items.removeAt(index);
-      }
-    }
-  }
-
-  /// Update quantity of item at index.
-  /// Removes the item if quantity is 0 or less.
-  void updateQuantity(int index, int quantity) {
-    if (index >= 0 && index < _items.length) {
-      if (quantity <= 0) {
-        _items.removeAt(index);
-      } else {
-        _items[index].quantity = quantity;
-      }
-    }
-  }
-
-  /// Clear all items from the cart.
-  void clear() => _items.clear();
 }
