@@ -1,17 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/views/main_scaffold.dart';
+import 'package:flutter/material.dart';
 
 void main() {
-  testWidgets('MainScaffold displays welcome text', (WidgetTester tester) async {
+  testWidgets('MainScaffold renders with title', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
-        home: MainScaffold(
-          title: 'Sandwich Koullis',
-          child: const Center(child: Text('Welcome to Sandwich Koullis!')),
-        ),
+        home: MainScaffold(title: 'Test Title', child: Container()),
       ),
     );
-    expect(find.text('Welcome to Sandwich Koullis!'), findsOneWidget);
+    expect(find.text('Test Title'), findsOneWidget);
   });
 }
