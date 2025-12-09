@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/views/app_styles.dart';
+import 'package:provider/provider.dart';
+import 'package:sandwich_koullis/models/cart.dart';
 import 'package:sandwich_koullis/views/styled_button.dart';
 import 'package:sandwich_koullis/views/main_scaffold.dart';
 
@@ -35,9 +37,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainScaffold(
-      title: 'Profile',
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 100,
+            child: Image.asset('assets/images/logo.png'),
+          ),
+        ),
+          title: Text('Profile', style: heading1),
+          actions: [
+            Consumer<Cart>(
+              builder: (context, cart, child) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.shopping_cart),
+                      const SizedBox(width: 4),
+                      Text('${cart.countOfItems}'),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
