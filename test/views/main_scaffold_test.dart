@@ -14,7 +14,9 @@ void main() {
 
   testWidgets('MainScaffold renders child widget', (WidgetTester tester) async {
     await tester.pumpWidget(
+      // ignore: prefer_const_constructors
       MaterialApp(
+        // ignore: prefer_const_constructors
         home: MainScaffold(title: 'Test Title', child: Text('Hello World')),
       ),
     );

@@ -45,7 +45,9 @@ void main() {
   testWidgets('StyledButton is disabled when onPressed is null',
       (WidgetTester tester) async {
     await tester.pumpWidget(
+      // ignore: prefer_const_constructors
       MaterialApp(
+        // ignore: prefer_const_constructors
         home: StyledButton(
           onPressed: null,
           icon: Icons.block,

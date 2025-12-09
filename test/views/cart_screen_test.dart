@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sandwich_koullis/views/cart_screen.dart';
 import 'package:sandwich_koullis/models/cart.dart';
