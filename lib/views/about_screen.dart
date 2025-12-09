@@ -7,7 +7,7 @@ class AboutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MainScaffold(
+    return MainScaffold(
       title: 'About Us',
       child: Padding(
         padding: EdgeInsets.all(16.0),
