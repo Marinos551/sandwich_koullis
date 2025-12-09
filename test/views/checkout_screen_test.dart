@@ -1,9 +1,19 @@
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sandwich_koullis/views/checkout_screen.dart';
+import 'package:sandwich_koullis/models/cart.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  // Dummy test to ensure the file is included in test coverage.
-  test('checkout_screen.dart loads', () {
-    expect(1, equals(1));
+  testWidgets('CheckoutScreen renders', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ChangeNotifierProvider(
+          create: (_) => Cart(),
+          child: const CheckoutScreen(),
+        ),
+      ),
+    );
+    expect(find.byType(CheckoutScreen), findsOneWidget);
   });
 }
