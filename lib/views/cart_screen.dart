@@ -1,3 +1,4 @@
+import 'package:sandwich_koullis/views/common_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:sandwich_koullis/models/cart.dart';
 import 'package:sandwich_koullis/models/sandwich.dart';
@@ -17,6 +18,12 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+    void _remove(int index) {
+      setState(() {
+        final sandwich = _cart.items.keys.elementAt(index);
+        _cart.remove(sandwich);
+      });
+    }
   Cart get _cart => widget.cart;
 
   void _increment(int index) {
@@ -28,47 +35,17 @@ class _CartScreenState extends State<CartScreen> {
   void _decrement(int index) {
     setState(() {
       // If decrement removes item, show undo
-      final beforeQty = _cart.items[index].quantity;
+      final sandwich = _cart.items.keys.elementAt(index);
+      final beforeQty = _cart.getQuantity(sandwich);
       _cart.decrementQuantity(index);
       if (beforeQty == 1) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             key: const Key('cart_undo_snack'),
-            content: const Text('Item removed'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () {
-                // simple restore: re-add the item with qty 1
-                // NOTE: this is a temporary approach until Cart exposes restoreItem
-                // Here we won't know the sandwich that was removed; for now, show message only.
-              },
-            ),
+            content: Text('Item removed from cart'),
           ),
         );
       }
-    });
-  }
-
-  void _remove(int index) {
-    setState(() {
-      // store removed item for potential undo
-      final removed = _cart.items[index];
-      _cart.removeAt(index);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          key: const Key('cart_undo_snack'),
-          content: Text('Removed ${removed.sandwich.name}'),
-          action: SnackBarAction(
-            label: 'Undo',
-            onPressed: () {
-              setState(() {
-                _cart.addSandwich(removed.sandwich, quantity: removed.quantity);
-              });
-            },
-          ),
-        ),
-      );
     });
   }
 
@@ -81,9 +58,10 @@ class _CartScreenState extends State<CartScreen> {
     if (result != null) {
       setState(() {
         // Simple replace: update sandwich by removing and adding with same qty
-        final qty = _cart.items[index].quantity;
-        _cart.removeAt(index);
-        _cart.addSandwich(result, quantity: qty);
+        final sandwich = _cart.items.keys.elementAt(index);
+        final qty = _cart.getQuantity(sandwich);
+        _cart.remove(sandwich);
+        _cart.add(result, quantity: qty);
       });
     }
   }
@@ -102,7 +80,7 @@ class _CartScreenState extends State<CartScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CheckoutScreen(cart: widget.cart),
+        builder: (context) => const CheckoutScreen(),
       ),
     );
 
@@ -155,9 +133,11 @@ class _CartScreenState extends State<CartScreen> {
                     child: ListView.builder(
                       itemCount: _cart.items.length,
                       itemBuilder: (context, index) {
-                        final item = _cart.items[index];
+                        final sandwich = _cart.items.keys.elementAt(index);
+                        final quantity = _cart.items[sandwich]!;
+                        final cartItem = CartItem(sandwich: sandwich, quantity: quantity);
                         return CartItemRow(
-                          item: item,
+                          item: cartItem,
                           index: index,
                           onIncrement: _increment,
                           onDecrement: _decrement,
