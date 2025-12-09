@@ -1,10 +1,10 @@
-
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:sandwich_koullis/views/app_styles.dart';
 
 void main() {
-  // Dummy test to ensure the file is included in test coverage.
-  test('app_styles.dart loads', () {
-    expect(1, equals(1));
+  test('TextStyles are defined', () {
+    expect(heading1, isNotNull);
+    expect(heading2, isNotNull);
+    expect(normalText, isNotNull);
   });
 }
