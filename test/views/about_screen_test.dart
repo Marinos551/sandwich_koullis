@@ -13,5 +13,15 @@ void main() {
       ),
     );
     expect(find.byType(AboutScreen), findsOneWidget);
+    // Check for title
+    expect(find.text('About Us'), findsOneWidget);
+    // Check for welcome message
+    expect(find.text('Welcome to Sandwich Shop!'), findsOneWidget);
+    // Check for about description
+    expect(find.textContaining('family-owned business'), findsOneWidget);
+    // Check for at least one Column
+    expect(find.byType(Column), findsWidgets);
+    // Check for at least one Padding
+    expect(find.byType(Padding), findsWidgets);
   });
 }
