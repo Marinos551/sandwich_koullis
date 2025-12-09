@@ -3,7 +3,8 @@ import 'package:sandwich_koullis/main.dart';
 
 void main() {
   testWidgets('App loads and displays main screen', (WidgetTester tester) async {
-  await tester.pumpWidget(const App());
+    await tester.pumpWidget(const App());
     expect(find.text('Welcome to Sandwich Koullis!'), findsOneWidget);
+    expect(find.text('Sandwich Counter'), findsOneWidget);
   });
 }
