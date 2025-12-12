@@ -23,19 +23,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading,
       title: Text(title),
       actions: [
-        Consumer<Cart>(
-          builder: (context, cart, child) {
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.shopping_cart),
-                // ignore: prefer_const_constructors
-                SizedBox(width: 4),
-                Text('${cart.countOfItems}'),
-              ],
-            );
-          },
-        ),
+        const CartIndicator(),
         if (actions != null) ...actions!,
       ],
     );
